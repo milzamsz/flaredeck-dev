@@ -1,0 +1,108 @@
+---
+title: Advanced YAML Configuration
+description: Fine-tune tunnel settings with the raw YAML editor
+icon: Wrench
+---
+
+## Using the Raw YAML Editor
+
+FlareDeck includes a built-in YAML editor for cases when the visual interface doesn't expose the setting you need. Access it from any profile by clicking the **YAML** tab.
+
+The editor provides:
+
+- Syntax highlighting for YAML
+- Validation before saving — FlareDeck checks for structural errors
+- Direct mapping to the `~/.cloudflared/<tunnel-id>.yml` file
+
+<Callout type="warn">
+Changes in the YAML editor overwrite the visual configuration. If you switch back to the visual editor, your raw YAML changes are preserved but may be reformatted.
+</Callout>
+
+## Config File Format
+
+A `cloudflared` configuration file follows this structure:
+
+```yaml title="~/.cloudflared/<tunnel-id>.yml"
+tunnel: <tunnel-uuid>
+credentials-file: /home/user/.cloudflared/<tunnel-uuid>.json
+
+ingress:
+  - hostname: app.example.com
+    service: http://localhost:3000
+  - service: http_status:404
+```
+
+The `tunnel` and `credentials-file` fields are managed by FlareDeck — you should not need to change them manually.
+
+## Advanced Ingress Options
+
+Each ingress rule supports an `originRequest` block for fine-grained control:
+
+```yaml
+ingress:
+  - hostname: app.example.com
+    service: https://localhost:3000
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      httpHostHeader: app.example.com
+  - service: http_status:404
+```
+
+### Common originRequest options
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `noTLSVerify` | boolean | Skip TLS certificate verification for the origin |
+| `connectTimeout` | duration | Timeout for connecting to the origin (e.g., `30s`) |
+| `tlsTimeout` | duration | Timeout for TLS handshake (e.g., `10s`) |
+| `httpHostHeader` | string | Override the Host header sent to the origin |
+| `originServerName` | string | SNI server name for TLS verification |
+| `disableChunkedEncoding` | boolean | Disable chunked transfer encoding |
+| `proxyType` | string | Proxy protocol version (`""`, `"v1"`, `"v2"`) |
+
+### Global vs per-rule originRequest
+
+You can set `originRequest` at the top level to apply to all rules, or on individual rules:
+
+```yaml
+# Global default
+originRequest:
+  connectTimeout: 30s
+
+ingress:
+  - hostname: secure.example.com
+    service: https://localhost:8443
+    originRequest:
+      noTLSVerify: true  # Override for this rule only
+  - hostname: app.example.com
+    service: http://localhost:3000
+    # Uses global connectTimeout: 30s
+  - service: http_status:404
+```
+
+## Backup and Restore
+
+### Manual backup
+
+Copy your entire `~/.cloudflared/` directory:
+
+```bash
+# Backup
+cp -r ~/.cloudflared/ ~/.cloudflared-backup/
+
+# Restore
+cp -r ~/.cloudflared-backup/ ~/.cloudflared/
+```
+
+### What to back up
+
+| File | Purpose | Required? |
+| --- | --- | --- |
+| `cert.pem` | Account authorization | Yes — run `cloudflared tunnel login` to regenerate |
+| `<uuid>.json` | Tunnel credentials | Yes — cannot be regenerated |
+| `<uuid>.yml` | Tunnel configuration | Recommended — recreatable via FlareDeck |
+
+<Callout>
+Credential files (`<uuid>.json`) are generated once when a tunnel is created and **cannot be regenerated**. If lost, you must delete the tunnel and create a new one.
+</Callout>

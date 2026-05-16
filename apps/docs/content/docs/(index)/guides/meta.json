@@ -1,0 +1,4 @@
+{
+	"title": "Guides",
+	"pages": ["wsl-setup", "multi-tunnel", "yaml-config", "troubleshooting"]
+}

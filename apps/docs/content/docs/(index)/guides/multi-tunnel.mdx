@@ -1,0 +1,73 @@
+---
+title: Running Multiple Tunnels
+description: Manage and run multiple tunnel profiles simultaneously
+icon: Users
+---
+
+## Use Cases
+
+Running multiple tunnels is useful when you need to:
+
+- **Separate projects** — Each project gets its own tunnel with isolated ingress rules
+- **Multiple environments** — Run staging and development tunnels side by side
+- **Team demos** — Expose different services on different hostnames simultaneously
+- **Microservices** — Give each service its own dedicated tunnel
+
+## Creating Separate Profiles
+
+Each tunnel in FlareDeck is a separate profile. To set up multiple tunnels:
+
+1. Click **New Profile** for each tunnel you need.
+2. Give each profile a descriptive name (e.g., `frontend-dev`, `api-dev`, `webhook-test`).
+3. Configure ingress rules independently for each profile.
+
+Each profile creates its own `cloudflared` named tunnel with separate credentials and configuration.
+
+## Running Tunnels Concurrently
+
+To run multiple tunnels at the same time:
+
+1. Select the first profile and click **Start**.
+2. Switch to the next profile and click **Start**.
+3. Repeat for each tunnel you want active.
+
+Each tunnel runs as an independent `cloudflared` process. The sidebar shows the status of all profiles at a glance.
+
+<Callout>
+There is no hard limit on concurrent tunnels, but each running tunnel consumes system resources (one `cloudflared` process per tunnel). For most development scenarios, 2–4 concurrent tunnels work well.
+</Callout>
+
+## Managing Ports and Hostname Conflicts
+
+When running multiple tunnels, watch out for these common conflicts:
+
+### Port conflicts
+
+Two ingress rules across different profiles can point to the same local port — `cloudflared` doesn't care since each tunnel is independent. However, only one local service can listen on a given port.
+
+### Hostname conflicts
+
+Each hostname can only route to **one** tunnel at a time. If you try to create a DNS route for a hostname that's already pointed at another tunnel, `cloudflared` will return an error.
+
+To resolve hostname conflicts:
+
+1. Delete the existing DNS route from the old profile.
+2. Add the DNS route to the new profile.
+
+### Example: Two-project setup
+
+```yaml title="Profile: frontend-dev"
+ingress:
+  - hostname: app.example.com
+    service: http://localhost:3000
+  - service: http_status:404
+```
+
+```yaml title="Profile: api-dev"
+ingress:
+  - hostname: api.example.com
+    service: http://localhost:8080
+  - service: http_status:404
+```
+
+Both profiles can run simultaneously — they use different hostnames and different local ports.

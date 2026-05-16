@@ -1,0 +1,97 @@
+---
+title: Quick Start
+description: Get your first tunnel running in under 5 minutes
+icon: Play
+---
+
+This guide walks you through creating and starting your first Cloudflare Tunnel with FlareDeck. By the end, you'll have a local service exposed to the internet.
+
+<Callout>
+Make sure you've completed the [Installation](/docs/installation) steps before continuing. You need `cloudflared` installed and authenticated.
+</Callout>
+
+## Create Your First Tunnel
+
+<Steps>
+
+<Step>
+### Launch FlareDeck
+
+Open FlareDeck from the Start Menu. On first launch, it will detect your `cloudflared` installation and scan for existing tunnels.
+</Step>
+
+<Step>
+### Create a Profile
+
+Click **New Profile** in the sidebar. Give your profile a descriptive name — for example, `my-dev-server`.
+
+FlareDeck creates a new named tunnel via `cloudflared` and generates a configuration file at `~/.cloudflared/<profile-id>.yml`.
+</Step>
+
+<Step>
+### Add an Ingress Rule
+
+In the profile editor, click **Add Rule** to create your first ingress entry:
+
+- **Hostname**: `myapp.example.com` (a subdomain on your Cloudflare zone)
+- **Service**: `http://localhost:3000` (your local dev server)
+
+```yaml title="Generated config"
+ingress:
+  - hostname: myapp.example.com
+    service: http://localhost:3000
+  - service: http_status:404
+```
+
+The catch-all rule (`http_status:404`) is added automatically.
+</Step>
+
+<Step>
+### Configure DNS
+
+Click **Add DNS Route** to point your hostname to the tunnel. FlareDeck runs the equivalent of:
+
+```bash
+cloudflared tunnel route dns <tunnel-id> myapp.example.com
+```
+
+This creates a CNAME record in your Cloudflare DNS.
+</Step>
+
+<Step>
+### Start the Tunnel
+
+Click the **Start** button. FlareDeck spawns `cloudflared tunnel run` as a background process and begins streaming logs in the **Monitor** tab.
+
+You should see output similar to:
+
+```
+INF Starting tunnel tunnelID=<your-tunnel-id>
+INF Connection established connIndex=0
+INF Connection established connIndex=1
+```
+</Step>
+
+<Step>
+### Verify
+
+Open `https://myapp.example.com` in your browser. You should see your local development server's response served through the Cloudflare Tunnel.
+
+The Monitor tab shows live connection logs and any errors. The profile status indicator turns **green** when the tunnel is healthy.
+</Step>
+
+</Steps>
+
+## Next Steps
+
+<Cards>
+  <Card title="Managing Profiles" icon={<UsersIcon />} href="/docs/essentials/profiles">
+    Learn how to organize multiple tunnel configurations.
+  </Card>
+  <Card title="Ingress Rules" icon={<RouteIcon />} href="/docs/essentials/ingress">
+    Dive deeper into hostname-to-service mapping.
+  </Card>
+  <Card title="Live Monitoring" icon={<MonitorIcon />} href="/docs/essentials/monitoring">
+    Understand tunnel status and log streaming.
+  </Card>
+</Cards>

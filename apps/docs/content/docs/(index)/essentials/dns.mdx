@@ -1,0 +1,70 @@
+---
+title: DNS Routing
+description: Configure DNS routes for your tunnels
+icon: Globe
+---
+
+## What DNS Routing Does
+
+DNS routing connects a public hostname to your Cloudflare Tunnel. When you add a DNS route, FlareDeck creates a CNAME record in your Cloudflare DNS that points the hostname to your tunnel's address.
+
+Without a DNS route, your tunnel is running but unreachable — there's no public hostname directing traffic into it.
+
+Under the hood, FlareDeck runs:
+
+```bash
+cloudflared tunnel route dns <tunnel-id> <hostname>
+```
+
+This creates a CNAME record: `<hostname> → <tunnel-id>.cfargotunnel.com`.
+
+## Adding DNS Routes
+
+<Steps>
+
+<Step>
+### Open the Profile
+
+Select the profile you want to add DNS routing to from the sidebar.
+</Step>
+
+<Step>
+### Add a Route
+
+Click **Add DNS Route** and enter the hostname you want to point at this tunnel (e.g., `app.example.com`).
+
+The hostname must be on a Cloudflare zone that your `cloudflared` certificate is authorized for.
+</Step>
+
+<Step>
+### Confirm
+
+FlareDeck validates the hostname and creates the CNAME record. The route appears in the DNS routes list for that profile.
+</Step>
+
+</Steps>
+
+## Hostname Validation
+
+FlareDeck checks hostnames before creating DNS routes:
+
+- The hostname must be a valid domain or subdomain.
+- The parent zone must be managed by Cloudflare.
+- Your `cert.pem` must be authorized for the zone (set during `cloudflared tunnel login`).
+- Duplicate hostnames across different tunnels are flagged as conflicts.
+
+<Callout type="warn">
+If a hostname is already pointed at another tunnel or DNS record, `cloudflared` will return an error. You must remove the existing record first.
+</Callout>
+
+## Managing Existing Routes
+
+DNS routes for a profile are listed in the profile's **DNS** tab. From here you can:
+
+- **View** all hostnames routed to this tunnel
+- **Delete** a route — this removes the CNAME record from Cloudflare DNS
+- **Identify conflicts** — FlareDeck warns if a hostname is already in use
+
+<Callout>
+DNS route changes take effect immediately. Cloudflare's DNS propagation is typically under 30 seconds for proxied records.
+</Callout>

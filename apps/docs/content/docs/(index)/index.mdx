@@ -1,0 +1,39 @@
+---
+title: Introduction
+description: Welcome to FlareDeck documentation
+icon: Book
+---
+
+## What is FlareDeck?
+
+FlareDeck is a desktop control panel for managing [Cloudflare Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) during local development. Instead of juggling `cloudflared` CLI commands, YAML configs, and terminal windows, FlareDeck gives you a visual interface to create, configure, and monitor your tunnels.
+
+Built with **Tauri** and **React**, FlareDeck runs natively on your machine with minimal resource overhead.
+
+## Who is it for?
+
+FlareDeck is designed for developers who use Cloudflare Tunnels to expose local services — whether for webhook testing, sharing dev environments, or running demo servers. If you find yourself repeatedly editing `~/.cloudflared/*.yml` files and restarting `cloudflared`, FlareDeck is for you.
+
+## Key Capabilities
+
+- **Profile Management** — Create named tunnel configurations, each with its own ingress rules and settings. Run multiple profiles independently.
+- **Visual Ingress Editor** — Map hostnames to local services without hand-editing YAML. Add, reorder, and validate rules through a drag-and-drop interface.
+- **DNS Routing** — Configure DNS routes for your tunnels directly from the app.
+- **Live Monitoring** — Stream `cloudflared` stdout/stderr in real time. See tunnel status at a glance with clear indicators for running, starting, stopping, and error states.
+- **Raw YAML Editor** — Drop into full YAML editing when you need fine-grained control over `cloudflared` configuration options.
+- **WSL-Aware** — Automatically handles IP rewriting for services running inside WSL.
+
+## Architecture
+
+FlareDeck operates entirely on your local machine. It reads and writes configuration files in `~/.cloudflared/`, and spawns `cloudflared` as a child process — there are no external API calls to Cloudflare's dashboard. Your tunnel credentials stay on disk, and FlareDeck never transmits them anywhere.
+
+## Get Started
+
+<Cards>
+  <Card title="Installation" icon={<DownloadIcon />} href="/docs/installation">
+    Download and install FlareDeck on your system.
+  </Card>
+  <Card title="Quick Start" icon={<PlayIcon />} href="/docs/quickstart">
+    Create your first tunnel in under 5 minutes.
+  </Card>
+</Cards>

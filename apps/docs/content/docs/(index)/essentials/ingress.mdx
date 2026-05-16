@@ -1,0 +1,86 @@
+---
+title: Ingress Rules
+description: Map hostnames to local services with ingress rules
+icon: Route
+---
+
+## What are Ingress Rules?
+
+Ingress rules define how incoming requests to your Cloudflare Tunnel are routed to local services. Each rule maps a **hostname** (like `app.example.com`) to a **service** (like `http://localhost:3000`).
+
+When a request arrives at the tunnel, `cloudflared` evaluates rules from top to bottom and routes to the first matching hostname. A catch-all rule at the bottom handles any unmatched requests.
+
+## Using the Visual Editor
+
+FlareDeck provides a visual ingress editor so you don't need to write YAML by hand. For each rule, you configure:
+
+- **Hostname** — The public hostname that will route to this service (e.g., `app.example.com`)
+- **Service** — The local address to forward traffic to (e.g., `http://localhost:3000`)
+
+Click **Add Rule** to create a new entry, or drag rules to reorder their priority.
+
+## Rule Ordering
+
+Rules are evaluated **top to bottom**. Place more specific rules above general ones:
+
+```yaml title="Example ingress config"
+ingress:
+  - hostname: api.example.com
+    service: http://localhost:8080
+  - hostname: app.example.com
+    service: http://localhost:3000
+  - hostname: "*.example.com"
+    service: http://localhost:5000
+  - service: http_status:404
+```
+
+In this example, `api.example.com` is matched first. A request to `docs.example.com` falls through to the wildcard rule.
+
+## Catch-All Rule
+
+Every ingress configuration **must** end with a catch-all rule that has no hostname. FlareDeck adds this automatically:
+
+```yaml
+- service: http_status:404
+```
+
+This returns a 404 for any request that doesn't match a specific rule. You can change the catch-all to proxy to a default service if needed.
+
+## Common Service Types
+
+| Service URL | Description |
+| --- | --- |
+| `http://localhost:3000` | HTTP service on port 3000 |
+| `https://localhost:8443` | HTTPS service (with TLS) |
+| `tcp://localhost:5432` | Raw TCP (e.g., PostgreSQL) |
+| `ssh://localhost:22` | SSH server |
+| `http_status:404` | Static HTTP response code |
+| `hello_world` | Built-in cloudflared test server |
+
+## Example Configurations
+
+### Web application with API
+
+```yaml
+ingress:
+  - hostname: api.myapp.com
+    service: http://localhost:8080
+  - hostname: myapp.com
+    service: http://localhost:3000
+  - service: http_status:404
+```
+
+### Development server with WebSocket support
+
+```yaml
+ingress:
+  - hostname: dev.myapp.com
+    service: http://localhost:5173
+    originRequest:
+      noTLSVerify: true
+  - service: http_status:404
+```
+
+<Callout>
+For advanced `originRequest` options like `noTLSVerify`, `connectTimeout`, or custom headers, use the [Raw YAML Editor](/docs/guides/yaml-config).
+</Callout>

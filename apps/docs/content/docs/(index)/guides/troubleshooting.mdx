@@ -1,0 +1,134 @@
+---
+title: Troubleshooting
+description: Common issues and how to resolve them
+icon: TriangleAlert
+---
+
+## Tunnel Won't Start
+
+### cloudflared not found
+
+**Symptom**: FlareDeck shows "cloudflared not found" or the Start button is disabled.
+
+**Solution**:
+1. Verify `cloudflared` is installed: run `cloudflared --version` in a terminal.
+2. If installed but not detected, set the binary path manually in **Settings**.
+3. If not installed, follow the [Installation](/docs/installation) guide.
+
+### Not authenticated
+
+**Symptom**: Error message mentioning `cert.pem` not found or authentication failure.
+
+**Solution**:
+Run `cloudflared tunnel login` in a terminal to authenticate. This creates `~/.cloudflared/cert.pem`.
+
+```bash
+cloudflared tunnel login
+```
+
+### Tunnel name already exists
+
+**Symptom**: `failed to create tunnel: tunnel with name already exists`
+
+**Solution**:
+Choose a different profile name, or delete the existing tunnel first:
+
+```bash
+cloudflared tunnel list
+cloudflared tunnel delete <existing-tunnel-name>
+```
+
+## DNS Errors
+
+### Hostname already in use
+
+**Symptom**: `You already have a DNS record for this hostname`
+
+**Solution**:
+The hostname is pointed at another tunnel or has a conflicting DNS record. Remove the existing record from your Cloudflare DNS dashboard or from the other profile in FlareDeck, then retry.
+
+### Zone not authorized
+
+**Symptom**: `failed to add DNS: zone not found`
+
+**Solution**:
+Your `cert.pem` isn't authorized for this domain. Run `cloudflared tunnel login` again and select the correct zone.
+
+## Connection Issues
+
+### Connection refused
+
+**Symptom**: `dial tcp 127.0.0.1:3000: connect: connection refused`
+
+**Cause**: The local service in your ingress rule isn't running.
+
+**Solution**:
+1. Start your local development server.
+2. Verify it's listening on the correct port: `curl http://localhost:3000`.
+3. If using WSL, make sure the service binds to `0.0.0.0`, not `127.0.0.1`.
+
+### Connection timeout
+
+**Symptom**: Requests hang and eventually time out.
+
+**Possible causes**:
+- Firewall blocking the connection
+- Service is too slow to respond
+- Wrong port in the ingress rule
+
+**Solution**:
+1. Check your firewall settings — allow `cloudflared` through.
+2. Increase the connect timeout in the [YAML config](/docs/guides/yaml-config):
+
+```yaml
+ingress:
+  - hostname: app.example.com
+    service: http://localhost:3000
+    originRequest:
+      connectTimeout: 60s
+  - service: http_status:404
+```
+
+## Log Interpretation
+
+Use the **Monitor** tab to diagnose issues. Key patterns to look for:
+
+| Log Pattern | Meaning |
+| --- | --- |
+| `INF Connection established` | Healthy — tunnel is connected |
+| `ERR Unable to establish connection` | Can't reach Cloudflare edge |
+| `ERR dial tcp ... connection refused` | Local service is not running |
+| `WRN Retrying connection` | Temporary issue, auto-recovering |
+| `ERR Unregistered tunnel` | Tunnel was deleted remotely |
+
+## How to Reset Configuration
+
+If your configuration is in a bad state, you can reset:
+
+<Steps>
+
+<Step>
+### Stop all tunnels
+
+Stop all running profiles in FlareDeck.
+</Step>
+
+<Step>
+### Back up existing config
+
+```bash
+cp -r ~/.cloudflared/ ~/.cloudflared-backup/
+```
+</Step>
+
+<Step>
+### Delete and recreate
+
+Delete the problematic profile in FlareDeck and create a new one. This provisions a fresh tunnel with clean configuration.
+</Step>
+
+</Steps>
+
+<Callout>
+If you need to start completely fresh, delete all files in `~/.cloudflared/` except `cert.pem`, then relaunch FlareDeck. You'll need to create new profiles from scratch.
+</Callout>

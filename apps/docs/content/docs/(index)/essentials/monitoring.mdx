@@ -1,0 +1,73 @@
+---
+title: Live Monitoring
+description: Stream logs and monitor tunnel health in real time
+icon: Monitor
+---
+
+## Log Viewer
+
+Every running profile has a **Monitor** tab that streams `cloudflared` output in real time. The log viewer displays both `stdout` and `stderr` from the tunnel process, giving you full visibility into what's happening.
+
+Logs are color-coded by level:
+
+- **INF** (info) — Normal operations like connection establishment
+- **WRN** (warning) — Non-critical issues like retry attempts
+- **ERR** (error) — Failures that may require attention
+
+The viewer auto-scrolls to the latest entry. You can scroll up to inspect earlier logs without losing new output.
+
+## Real-Time Streaming
+
+FlareDeck captures output from the `cloudflared` child process as it runs. There's no polling or delay — logs appear as they're written. This is especially useful for:
+
+- **Debugging connection issues** — See exactly when and why connections fail
+- **Monitoring traffic** — Watch requests flow through the tunnel
+- **Catching errors early** — Spot misconfigurations before they become problems
+
+## Tunnel Status Indicators
+
+Each profile shows a status indicator in the sidebar:
+
+| Status | Indicator | Description |
+| --- | --- | --- |
+| **Running** | Green | Tunnel is active and healthy |
+| **Starting** | Yellow | `cloudflared` process is launching |
+| **Stopping** | Yellow | Tunnel is shutting down gracefully |
+| **Stopped** | Gray | Tunnel is not running |
+| **Error** | Red | Process exited with an error |
+
+The status updates automatically based on the `cloudflared` process state and log output.
+
+## Health Checks
+
+When a tunnel is running, FlareDeck monitors the `cloudflared` process health:
+
+- **Process alive** — Checks that the `cloudflared` process hasn't crashed
+- **Connection count** — `cloudflared` establishes multiple connections (typically 4) to Cloudflare's edge; FlareDeck tracks these via log output
+- **Error detection** — Repeated errors in the log stream trigger a status change
+
+<Callout>
+If a tunnel repeatedly fails to connect, check the [Troubleshooting](/docs/guides/troubleshooting) guide for common causes and solutions.
+</Callout>
+
+## Common Log Messages
+
+```
+INF Starting tunnel tunnelID=abc-123
+```
+The tunnel process has started.
+
+```
+INF Connection established connIndex=0 ...
+```
+A connection to Cloudflare's edge network was established. Healthy tunnels typically show 4 connections.
+
+```
+ERR Unable to establish connection ... dial tcp: connect: connection refused
+```
+The local service specified in an ingress rule isn't running or is unreachable.
+
+```
+WRN Retrying connection in up to 4s connIndex=0
+```
+A connection was lost and `cloudflared` is attempting to reconnect.

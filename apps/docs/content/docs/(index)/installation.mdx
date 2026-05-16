@@ -1,0 +1,86 @@
+---
+title: Installation
+description: How to install FlareDeck on your system
+icon: Download
+---
+
+## Prerequisites
+
+Before installing FlareDeck, make sure you have the following:
+
+<Steps>
+
+<Step>
+### Install cloudflared
+
+FlareDeck requires the `cloudflared` CLI to be installed and available in your system PATH.
+
+```bash
+# Windows (winget)
+winget install --id Cloudflare.cloudflared
+
+# Windows (scoop)
+scoop install cloudflared
+```
+
+Verify the installation:
+
+```bash
+cloudflared --version
+```
+</Step>
+
+<Step>
+### Authenticate cloudflared
+
+You must authenticate `cloudflared` with your Cloudflare account at least once. This creates a `cert.pem` file in `~/.cloudflared/` that FlareDeck needs to manage tunnels.
+
+```bash
+cloudflared tunnel login
+```
+
+This opens a browser window where you select the Cloudflare zone to authorize. Once complete, the certificate is saved locally.
+</Step>
+
+</Steps>
+
+<Callout type="warn">
+FlareDeck cannot function without an authenticated `cloudflared` installation. If you skip this step, tunnel creation and DNS routing will fail.
+</Callout>
+
+## Download FlareDeck
+
+Download the latest release from the [GitHub Releases](https://github.com/FlareDeck/flaredeck/releases) page.
+
+| Platform | File | Status |
+| --- | --- | --- |
+| Windows 10+ | `FlareDeck_x.x.x_x64-setup.exe` | Available |
+| macOS | Coming soon | Planned |
+| Linux | Coming soon | Planned |
+
+## Windows Installation
+
+1. Download the `.exe` installer from GitHub Releases.
+2. Run the installer — it will guide you through setup.
+3. Launch FlareDeck from the Start Menu or desktop shortcut.
+
+<Callout>
+FlareDeck stores its data in your user profile directory. No admin privileges are required after initial installation.
+</Callout>
+
+## System Requirements
+
+- **OS**: Windows 10 (version 1803+) or later
+- **Runtime**: WebView2 (included with Windows 10 1803+ and all Windows 11 installations)
+- **Disk**: ~50 MB for the application
+- **Dependencies**: `cloudflared` CLI installed and authenticated
+
+## First Launch
+
+On first launch, FlareDeck will:
+
+1. Detect your `cloudflared` binary location automatically.
+2. Scan `~/.cloudflared/` for existing tunnel configurations.
+3. Import any discovered tunnels as profiles.
+
+If `cloudflared` is not found in your PATH, you can manually set the binary path in **Settings**.

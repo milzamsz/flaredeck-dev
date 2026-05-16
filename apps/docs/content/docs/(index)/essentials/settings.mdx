@@ -1,0 +1,58 @@
+---
+title: Settings & Configuration
+description: Customize FlareDeck to fit your workflow
+icon: Settings
+---
+
+## Theme
+
+FlareDeck supports three theme modes:
+
+- **Light** — Bright interface for well-lit environments
+- **Dark** — Reduced eye strain for extended sessions
+- **System** — Automatically matches your OS theme preference
+
+Change the theme from **Settings → Appearance**.
+
+## cloudflared Binary Path
+
+By default, FlareDeck looks for `cloudflared` in your system PATH. If `cloudflared` is installed in a non-standard location, you can set the path manually:
+
+1. Open **Settings**.
+2. Under **cloudflared Path**, click **Browse** or enter the full path to the binary.
+3. FlareDeck validates the binary and displays the detected version.
+
+```
+# Default locations
+C:\Program Files\cloudflared\cloudflared.exe    # Windows (winget)
+C:\Users\<user>\scoop\apps\cloudflared\current\cloudflared.exe  # Windows (scoop)
+```
+
+<Callout>
+If you update `cloudflared` to a new version, FlareDeck will detect the change automatically on next launch.
+</Callout>
+
+## Default Settings
+
+FlareDeck uses sensible defaults that work for most development scenarios:
+
+| Setting | Default | Description |
+| --- | --- | --- |
+| Theme | System | Matches OS preference |
+| cloudflared path | Auto-detect | Searches PATH |
+| Log buffer size | 1000 lines | Max lines kept in memory per profile |
+| Auto-scroll logs | Enabled | Log viewer follows new output |
+
+## Backup Configuration
+
+FlareDeck's state is stored locally. To back up your configuration:
+
+1. **Tunnel configs** — Copy `~/.cloudflared/*.yml` files. These contain your ingress rules and tunnel settings.
+2. **Tunnel credentials** — Copy `~/.cloudflared/*.json` files. These are required to run named tunnels.
+3. **Certificate** — The `~/.cloudflared/cert.pem` file is your account authorization.
+
+<Callout type="warn">
+Treat credential files and `cert.pem` as secrets. Never commit them to version control or share them publicly.
+</Callout>
+
+To restore on a new machine, place these files in `~/.cloudflared/` and launch FlareDeck — it will discover and import the existing tunnels as profiles.

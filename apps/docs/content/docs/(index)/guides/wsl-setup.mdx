@@ -1,0 +1,88 @@
+---
+title: WSL Development Setup
+description: Expose services running in WSL through Cloudflare Tunnels
+icon: Terminal
+---
+
+## Windows + WSL Architecture
+
+When you run a development server inside WSL (Windows Subsystem for Linux), it binds to the WSL virtual network adapter — not your Windows host. This means `localhost` in Windows and `localhost` in WSL are different network contexts.
+
+FlareDeck runs as a native Windows application and spawns `cloudflared` on the Windows side. To tunnel traffic to a service inside WSL, the ingress rule needs to target the WSL instance's IP address rather than `localhost`.
+
+## How FlareDeck Handles WSL
+
+FlareDeck can automatically detect and rewrite service addresses for WSL:
+
+1. When you specify a service like `http://localhost:3000`, FlareDeck detects if the target port is only reachable inside WSL.
+2. It resolves the WSL instance's IP address (typically something like `172.x.x.x`).
+3. The generated config uses the WSL IP so `cloudflared` can reach the service.
+
+This happens transparently — you configure `localhost` in the UI, and FlareDeck handles the IP translation.
+
+<Callout>
+WSL2 assigns a dynamic IP address that changes on reboot. FlareDeck resolves the current IP each time you start a tunnel.
+</Callout>
+
+## Setting Up Services in WSL
+
+A typical workflow looks like this:
+
+<Steps>
+
+<Step>
+### Start your dev server in WSL
+
+```bash
+# Inside WSL terminal
+cd ~/my-project
+npm run dev -- --host 0.0.0.0 --port 3000
+```
+
+<Callout type="warn">
+Bind to `0.0.0.0`, not `127.0.0.1`. Services bound to `127.0.0.1` inside WSL are not reachable from the Windows host.
+</Callout>
+</Step>
+
+<Step>
+### Create a profile in FlareDeck
+
+Add an ingress rule pointing to `http://localhost:3000`. FlareDeck will handle the WSL IP resolution.
+</Step>
+
+<Step>
+### Start the tunnel
+
+Click **Start** — `cloudflared` runs on the Windows side and connects to your WSL service through the virtual network.
+</Step>
+
+</Steps>
+
+## Common Patterns
+
+### React/Vite dev server in WSL
+
+```bash
+# WSL
+vite --host 0.0.0.0 --port 5173
+```
+
+FlareDeck ingress: `http://localhost:5173`
+
+### Node.js API server in WSL
+
+```bash
+# WSL
+node server.js  # listening on 0.0.0.0:8080
+```
+
+FlareDeck ingress: `http://localhost:8080`
+
+### Database in WSL
+
+```bash
+# WSL — PostgreSQL listening on default port
+sudo service postgresql start
+```
+
+FlareDeck ingress: `tcp://localhost:5432` (for TCP tunnels)

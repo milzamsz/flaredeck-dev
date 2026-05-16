@@ -1,0 +1,73 @@
+---
+title: Managing Profiles
+description: Create and organize tunnel configurations with profiles
+icon: Users
+---
+
+## What are Profiles?
+
+A profile is a named tunnel configuration in FlareDeck. Each profile maps to a single Cloudflare Tunnel and contains its own set of ingress rules, DNS routes, and settings. Profiles let you maintain separate tunnel configurations for different projects or environments.
+
+Under the hood, each profile corresponds to a `cloudflared` named tunnel and a YAML configuration file stored at:
+
+```
+~/.cloudflared/<tunnel-id>.yml
+```
+
+## Creating a Profile
+
+1. Click **New Profile** in the sidebar.
+2. Enter a descriptive name (e.g., `webapp-dev`, `api-staging`).
+3. FlareDeck runs `cloudflared tunnel create <name>` to provision the tunnel.
+4. A credentials file and configuration YAML are generated in `~/.cloudflared/`.
+
+<Callout>
+Profile names must be unique. FlareDeck will warn you if a tunnel with the same name already exists.
+</Callout>
+
+## Editing a Profile
+
+Select a profile from the sidebar to open its editor. From here you can:
+
+- **Rename** the profile display name
+- **Add or modify ingress rules** using the visual editor
+- **Configure DNS routes** for the tunnel
+- **Edit raw YAML** for advanced configuration
+- **View the tunnel UUID** and credentials file path
+
+Changes are saved to the YAML config file immediately.
+
+## Deleting a Profile
+
+To delete a profile:
+
+1. Right-click the profile in the sidebar or use the **Delete** option in the profile menu.
+2. Confirm the deletion.
+
+FlareDeck runs `cloudflared tunnel delete <name>` and removes the associated configuration and credentials files.
+
+<Callout type="warn">
+Deleting a profile also removes any DNS routes pointing to that tunnel. Make sure the tunnel is stopped before deleting.
+</Callout>
+
+## Profile Isolation
+
+Each profile runs as an independent `cloudflared` process. This means:
+
+- Profiles do not share ingress rules or DNS routes.
+- You can start and stop profiles independently.
+- Multiple profiles can run concurrently (see [Running Multiple Tunnels](/docs/guides/multi-tunnel)).
+- A crash in one tunnel does not affect others.
+
+## Configuration File Location
+
+FlareDeck manages configuration files in the standard `cloudflared` directory:
+
+```
+~/.cloudflared/
+├── cert.pem                    # Account certificate
+├── <tunnel-id>.json            # Tunnel credentials
+└── <tunnel-id>.yml             # Tunnel configuration (managed by FlareDeck)
+```
+
+You can edit these files manually, but changes made outside FlareDeck will be picked up on the next profile reload.

@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 
 const GITHUB_REPO = "https://github.com/milzam/flaredeck";
 const GITHUB_RELEASES = "https://github.com/milzam/flaredeck/releases";
-const DOCS_URL = "/docs";
+const DOCS_URL = "https://docs.flaredeck.dev";
 
 function MobileNavLink({
 	href,

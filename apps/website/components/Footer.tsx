@@ -7,8 +7,8 @@ const GITHUB_REPO = "https://github.com/milzam/flaredeck";
 const links = [
 	{ href: "/#features", label: "Features" },
 	{ href: "/#faqs", label: "FAQ" },
-	{ href: "/docs", label: "Docs", external: true },
-	{ href: "/changelog", label: "Changelog" },
+	{ href: "https://docs.flaredeck.dev", label: "Docs", external: true },
+	{ href: "https://docs.flaredeck.dev/docs/changelog", label: "Changelog", external: true },
 	{ href: "/privacy", label: "Privacy" },
 	{ href: "/terms-of-service", label: "Terms" },
 ] as const;

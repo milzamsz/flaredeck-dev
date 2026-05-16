@@ -46,7 +46,7 @@ export function Hero() {
 
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
 					<Button asChild size="lg" className="rounded-full">
-						<Link href="/docs" aria-label="Get Started">
+						<Link href="https://docs.flaredeck.dev" target="_blank" aria-label="Get Started">
 							Get started
 							<ArrowRight className="ml-2 h-4 w-4" />
 						</Link>

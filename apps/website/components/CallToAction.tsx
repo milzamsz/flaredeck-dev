@@ -50,7 +50,8 @@ export function CallToAction() {
 						</Button>
 						<Button className="rounded-full" variant="outline" asChild>
 							<Link
-								href="/docs"
+								href="https://docs.flaredeck.dev"
+								target="_blank"
 								aria-label="Read the Docs"
 								className="flex flex-row items-center gap-2"
 							>

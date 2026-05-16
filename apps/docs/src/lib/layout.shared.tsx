@@ -53,6 +53,7 @@ export function baseOptions(): BaseLayoutProps {
 					</span>
 				</>
 			),
+			url: "https://flaredeck.dev",
 			transparentMode: "top",
 		},
 	};

@@ -40,8 +40,7 @@ export function Hero() {
 					<code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
 						cloudflared
 					</code>
-					. Spin up profiles, route DNS, tail logs, and edit configs — no API
-					keys, no terminal gymnastics.
+					. Spin up profiles, route DNS, tail logs, and edit configs — no terminal gymnastics.
 				</p>
 
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">

@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 		"Manage tunnel profiles, route DNS, monitor live logs, and edit configurations — all from a beautiful native desktop app.",
 	icons: {
 		icon: "icon.svg",
-		apple: "apple-touch-icon.png",
 	},
 	openGraph: {
 		title: "FlareDeck - Desktop Control Panel for Cloudflare Tunnel",

@@ -2,7 +2,7 @@ import { ArrowRight, Github, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-const GITHUB_REPO = "https://github.com/milzam/flaredeck";
+const GITHUB_REPO = "https://github.com/milzamsz/flaredeck";
 
 export function Hero() {
 	return (

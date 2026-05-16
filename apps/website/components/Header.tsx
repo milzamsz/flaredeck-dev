@@ -9,8 +9,8 @@ import { Container } from "./Container";
 import { Logo } from "./shared/Logo";
 import { Button } from "./ui/button";
 
-const GITHUB_REPO = "https://github.com/milzam/flaredeck";
-const GITHUB_RELEASES = "https://github.com/milzam/flaredeck/releases";
+const GITHUB_REPO = "https://github.com/milzamsz/flaredeck";
+const GITHUB_RELEASES = "https://github.com/milzamsz/flaredeck/releases";
 const DOCS_URL = "https://docs.flaredeck.dev";
 
 function MobileNavLink({

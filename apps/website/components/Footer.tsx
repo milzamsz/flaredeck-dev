@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Container } from "./Container";
 import { Logo } from "./shared/Logo";
 
-const GITHUB_REPO = "https://github.com/milzam/flaredeck";
+const GITHUB_REPO = "https://github.com/milzamsz/flaredeck";
 
 const links = [
 	{ href: "/#features", label: "Features" },

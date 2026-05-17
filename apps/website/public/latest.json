@@ -1,6 +1,19 @@
 {
-  "version": "",
-  "notes": "Placeholder — replaced by the GitHub Actions release workflow on each tag push.",
-  "pub_date": "1970-01-01T00:00:00Z",
-  "platforms": {}
+  "version": "0.2.1",
+  "notes": "See the [download page](https://flaredeck.com/download) for installers.\n\nSigned updater bundles for each platform are attached below.",
+  "pub_date": "2026-05-17T21:09:57.860Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSQnAxY0NNZFBZQitOZlZXalVNc2hnT0hDYm5GeG1LYVFEOFRuczdMOFpBMHJGTmlUWC8rK1J0R2s0N3V5VExyNm0rbXFhQjFCM3RJMVRHdjUzVTVwN0gyZHFkRVoreHcwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDUyMTk0CWZpbGU6RmxhcmVEZWNrXzAuMi4xX3g2NF9lbi1VUy5tc2kKbjRhOTNWdzlBNzhIbThaditPa2I0RUhrZGt0Ui8wYTlTZEpEclByM0kzU1VGOThCL0Mzdnc1d3BncEQxTDhzd2NyMXQ0aEVYdzJmTnRRZCtQYVVsRGc9PQo=",
+      "url": "https://github.com/milzamsz/flaredeck/releases/download/v0.2.1/FlareDeck_0.2.1_x64_en-US.msi"
+    },
+    "windows-x86_64-msi": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSQnAxY0NNZFBZQitOZlZXalVNc2hnT0hDYm5GeG1LYVFEOFRuczdMOFpBMHJGTmlUWC8rK1J0R2s0N3V5VExyNm0rbXFhQjFCM3RJMVRHdjUzVTVwN0gyZHFkRVoreHcwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDUyMTk0CWZpbGU6RmxhcmVEZWNrXzAuMi4xX3g2NF9lbi1VUy5tc2kKbjRhOTNWdzlBNzhIbThaditPa2I0RUhrZGt0Ui8wYTlTZEpEclByM0kzU1VGOThCL0Mzdnc1d3BncEQxTDhzd2NyMXQ0aEVYdzJmTnRRZCtQYVVsRGc9PQo=",
+      "url": "https://github.com/milzamsz/flaredeck/releases/download/v0.2.1/FlareDeck_0.2.1_x64_en-US.msi"
+    },
+    "windows-x86_64-nsis": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSQnAxY0NNZFBZQjlvU1VTejhzTGxSczVWamJzM2xFeWNTUVJmOTNjc3AyKzVZR0RlTncxaUE5V2l1WFBNSGNVQVJxN3FXQ3dQcGJUSU5pNTh3VHRWVW50eEdvZG5Md2drPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDUyMTk0CWZpbGU6RmxhcmVEZWNrXzAuMi4xX3g2NC1zZXR1cC5leGUKa3JVQ0xmdEh4SnFLZlBKeCs1WFVtUUFsek00TElkVmhHNDRTK2RZTWptbWdVa1N3TUVaYlgxVThMamlWeTJqMlZteDFnZHZXM3NpQkloZTZ1Z2xORFE9PQo=",
+      "url": "https://github.com/milzamsz/flaredeck/releases/download/v0.2.1/FlareDeck_0.2.1_x64-setup.exe"
+    }
+  }
 }

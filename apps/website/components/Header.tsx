@@ -10,7 +10,6 @@ import { Logo } from "./shared/Logo";
 import { Button } from "./ui/button";
 
 const GITHUB_REPO = "https://github.com/milzamsz/flaredeck";
-const GITHUB_RELEASES = "https://github.com/milzamsz/flaredeck/releases";
 const DOCS_URL = "https://docs.flaredeck.dev";
 
 function MobileNavLink({
@@ -106,7 +105,7 @@ function MobileNavigation() {
 									Documentation
 								</MobileNavLink>
 								<hr className="m-2 border-border" />
-								<MobileNavLink href={GITHUB_RELEASES} target="_blank">
+								<MobileNavLink href="/download">
 									<Button className="w-full" asChild>
 										<div className="group relative mx-auto flex w-full max-w-fit flex-row items-center justify-center rounded-2xl text-sm font-medium">
 											<span>Download</span>

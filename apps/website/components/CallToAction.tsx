@@ -40,9 +40,8 @@ export function CallToAction() {
 					<div className="mt-10 flex flex-wrap items-center justify-center gap-4">
 						<Button className="rounded-full" asChild>
 							<Link
-								href="https://github.com/milzamsz/flaredeck/releases"
+								href="/download"
 								aria-label="Download FlareDeck"
-								target="_blank"
 								className="flex flex-row items-center gap-2"
 							>
 								Download FlareDeck
